@@ -5,8 +5,8 @@ For full text see: http://blog.tuitman.org/
 
 ##How to run
 
-Install Go (golang) on your computer. Next, run example1:
+Install Go (golang) on your computer. Next:
 
-    go get github.com/tuitman/gosdl-tutorial/example1
+    go get github.com/jantuitman/gosdl-tutorial
 
 All other examples install in the same way

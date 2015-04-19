@@ -22,13 +22,13 @@ All other examples install in the same way.
 
 ### Working
 
-Example1 - window with eventloop, prints some info about received events.
-Example3 - print texts. For now: "Hello world!", requires Verdana.ttf to be in /Library/Fonts
+  - Example1 - window with eventloop, prints some info about received events.
+  - Example3 - print texts. For now: "Hello world!", requires Verdana.ttf to be in /Library/Fonts
 
 ### Planned
 
-Example2 - hardware accellerated clipping and combining views
-Example4 - a text box
+  - Example2 - hardware accellerated clipping and combining views
+  - Example4 - a text box
 
 ### Unplanned
 

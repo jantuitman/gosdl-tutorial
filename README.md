@@ -1,7 +1,7 @@
 # GOSDL tutorial
 
 
-For full text see: http://blog.tuitman.org/
+For full tutorial texts see: http://blog.tuitman.org/
 
 ##How to run
 
@@ -15,4 +15,21 @@ Then, install the example you want to run:
     cd $GOPATH/src/github.com/jantuitman/gosdl-tutorial/example1
     go install
 
-All other examples install in the same way
+All other examples install in the same way.
+
+
+## List of examples
+
+### Working
+
+Example1 - window with eventloop, prints some info about received events.
+Example3 - print texts. For now: "Hello world!", requires Verdana.ttf to be in /Library/Fonts
+
+### Planned
+
+Example2 - hardware accellerated clipping and combining views
+Example4 - a text box
+
+### Unplanned
+
+More to come soon.

@@ -2,7 +2,7 @@ package main
 
 import (
   "github.com/veandco/go-sdl2/sdl"
-  "github.com/veandco/go-sdl2/sdl_ttf"
+  "github.com/jantuitman/go-sdl2/sdl_ttf"
   "fmt"
 )
 
@@ -28,12 +28,25 @@ func test(window *sdl.Window) {
 
 
   ttf.Init()
-  font,err := ttf.OpenFont("/Library/Fonts/Verdana.ttf",12)
+  font,err := ttf.OpenFont("/Library/Fonts/Verdana.ttf",24)
   if err != nil {
     panic(err)
   }
-  var renderedTxt *sdl.Surface = font.RenderText_Shaded("Hello world!",sdl.Color{R: 0, G: 0, B: 0, A: 0xFF},sdl.Color{R: 0xFF, G: 0xFF, B: 0xFF, A: 0xFF})
-  renderedTxt.Blit(&sdl.Rect{0,0,renderedTxt.W,renderedTxt.H},surface,&sdl.Rect{50,50,renderedTxt.W,renderedTxt.H})
+  w,h,err := font.SizeUTF8("Hello World!")
+  if err != nil {
+    panic(err)
+  }
+  fmt.Printf("Widht, height of hello world = (%d, %d) \n",w,h)
+
+  renderedTxt1, err := font.RenderUTF8_Blended("Hello world!",sdl.Color{R: 0, G: 255, B: 0, A: 0xFF})
+  renderedTxt1.Blit(&sdl.Rect{0,0,renderedTxt1.W,renderedTxt1.H},surface,&sdl.Rect{20,20,renderedTxt1.W,renderedTxt1.H})
+
+  renderedTxt1.Free()
+  
+  renderedTxt2, err := font.RenderUTF8_Blended_Wrapped("This is an experiment with wrapped text, as you can see. It does not wrap very well if the words don't fit, so the usefullness of this func is debatable.",sdl.Color{R: 255, G: 0, B: 0, A: 0xFF}, 280)
+  renderedTxt2.Blit(&sdl.Rect{0,0,renderedTxt2.W,renderedTxt2.H},surface,&sdl.Rect{20,80,renderedTxt2.W,renderedTxt2.H})
+  renderedTxt2.Free()
+  
   window.UpdateSurface()
   ttf.Quit()
 }

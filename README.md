@@ -24,11 +24,12 @@ All other examples install in the same way.
 
   - Example1 - window with eventloop, prints some info about received events.
   - Example3 - print texts. For now: "Hello world!", requires Verdana.ttf to be in /Library/Fonts
+  - Example4 - a text box. (currently work in progress)
 
 ### Planned
 
   - Example2 - hardware accellerated clipping and combining views
-  - Example4 - a text box
+
 
 ### Unplanned
 

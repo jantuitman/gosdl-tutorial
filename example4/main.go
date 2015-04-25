@@ -96,15 +96,58 @@ func (self *TextBox) SetText(newValue string) {
   }
 }
 
+func (self *TextBox) handleKeyDown(keyEvent *sdl.KeyDownEvent) {
+  switch keyEvent.Keysym.Sym {
+    case sdl.K_TAB:
+      self.SetFocus(!self.focus)
+    case sdl.K_RETURN:
+      self.SetFocus(!self.focus)
+    case sdl.K_BACKSPACE:
+      if self.cursorX > 0 {
+        self.text = self.text[0:self.cursorX - 1] + self.text[self.cursorX:]
+        self.cursorX--
+        self.dirty = true
+      }
+    case sdl.K_DELETE:
+      if self.cursorX < len(self.text) {
+        self.text = self.text[0:self.cursorX] + self.text[self.cursorX+1:]
+        self.dirty = true
+      }
+    case sdl.K_HOME, sdl.K_PAGEUP:       
+      if self.cursorX != 0 {
+        self.cursorX = 0
+        self.dirty = true
+      }
+    case sdl.K_END, sdl.K_PAGEDOWN:        
+      if self.cursorX != len(self.text) {
+        self.cursorX = len(self.text)
+        self.dirty = true
+      }
+    case sdl.K_RIGHT:      
+      if (self.cursorX < len(self.text)) {
+        self.cursorX++
+        self.dirty = true
+      }
+    case sdl.K_LEFT:       
+      if self.cursorX > 0 {
+        self.cursorX--
+        self.dirty = true
+      }
+    case sdl.K_DOWN:       
+      fmt.Println("DOWN pressed")
+    case sdl.K_UP:         
+      fmt.Println("UP pressed")
+    default:
+    // no action required  
+  }
+}
+
 func (self *TextBox) HandleEvent(event sdl.Event) {
   switch event.(type) {
     case *sdl.KeyDownEvent:
       fmt.Println("KeyDownEvent",event)
       keyEvent := event.(*sdl.KeyDownEvent)
-      if keyEvent.Keysym.Sym == sdl.K_TAB {
-        fmt.Println("TAB pressed, toggling focus")
-        self.SetFocus(!self.focus)
-      }
+      self.handleKeyDown(keyEvent)
     case *sdl.TextInputEvent:
       if self.focus {
         fmt.Println("TextInputEvent while focused",event)

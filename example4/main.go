@@ -43,6 +43,22 @@ func (self *TextBox) BlitIfNeeded(parentSurface * sdl.Surface) bool {
   if self.dirty {
     // draw the background
     self.surface.FillRect(&sdl.Rect{0,0,int32(self.w),int32(self.h)},0xFFFFFFFF)
+    
+    // find out where the cursor is
+    var cursorLocation = 0
+    if self.cursorX > 0 {
+      w,_,err := self.font.SizeUTF8(self.text[0:self.cursorX])
+      if err != nil {
+        panic(err)
+      }
+      cursorLocation = cursorLocation + w + 1
+    }
+
+    // check if the cursorlocation is almost outside the window, and if so, make a scrolloffset
+    var scrollOffset = 0
+    if cursorLocation > self.w - 40 {
+      scrollOffset = cursorLocation - ( self.w - 40 )
+    }
 
     // draw the text
     if self.text != "" {
@@ -51,21 +67,12 @@ func (self *TextBox) BlitIfNeeded(parentSurface * sdl.Surface) bool {
       if err != nil {
         panic(err)
       }
-      txt.Blit(&sdl.Rect{0,0,txt.W,txt.H}, self.surface, &sdl.Rect{2,0,txt.W,txt.H})   
+      txt.Blit(&sdl.Rect{int32(scrollOffset),0,txt.W - int32(scrollOffset),txt.H}, self.surface, &sdl.Rect{2,0,txt.W,txt.H})   
     }
     // blit the cursor
-    var cursorLocation = 2
-    if self.cursorX > 0 {
-      w,_,err := self.font.SizeUTF8(self.text[0:self.cursorX])
-      if err != nil {
-        panic(err)
-      }
-      cursorLocation = cursorLocation + w + 1
-    }
     if self.focus {
-      self.surface.FillRect(&sdl.Rect{int32(cursorLocation + 2),2,2,int32(self.h - 4)},0x000000FF)
+      self.surface.FillRect(&sdl.Rect{int32(cursorLocation + 2 - scrollOffset),2,2,int32(self.h - 4)},0x000000FF)
     }
-
 
     self.surface.Blit(&sdl.Rect{0,0,int32(self.w),int32(self.h)}, parentSurface, &sdl.Rect{int32(self.x),int32(self.y),int32(self.w),int32(self.h)})
     self.dirty = false

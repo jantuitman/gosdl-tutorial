@@ -21,16 +21,22 @@ All other examples install in the same way.
 ## List of examples
 
 ### Working
+  
+  All examples require Verdana.ttf to be in /Library/Fonts. This is true on the Mac, but will not always be the case.
 
   - Example1 - window with eventloop, prints some info about received events.
-  - Example3 - print texts. For now: "Hello world!", requires Verdana.ttf to be in /Library/Fonts
-  - Example4 - a text box. (currently work in progress)
+  - Example2 - Button, ContainerView, combining views into multiple views
+  - Example3 - print texts. For now: "Hello world!", 
+  - Example4 - a text box. 
 
-### Planned
+### Planned/TODO.
 
-  - Example2 - hardware accellerated clipping and combining views
+  - hardware accellerated views
+  - further library separation like was done in example2, more generic methods.
+  - scrollview that lazily draws content
+  - image view
+  - label view with possibility of multiple line text.
+  - load font from right location.
+  - container that does some automatic layout.
 
 
-### Unplanned
-
-More to come soon.

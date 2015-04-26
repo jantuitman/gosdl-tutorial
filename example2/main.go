@@ -16,7 +16,9 @@ type BasicControl interface {
   ProcessEvent(event *ControlEvent)
   BlitIfNeeded(parentSurface * sdl.Surface) bool
   ParentControl() BasicControl 
-  getDimensions() Dimensions
+  setParent(control BasicControl)
+  getDimensions() Dimensions // relative tov parent
+  absoluteDimensions() Dimensions // relative tov window.
   isDirty() bool
 }
 
@@ -58,12 +60,16 @@ func (b *Basic) getSurface() *sdl.Surface {
 func (b *Basic) ParentControl() BasicControl {
   return b.parent
 }
+func (b *Basic) setParent(parent BasicControl)  {
+  b.parent = parent
+  b.dirty = true
+}
 
 func (b *Basic) absoluteDimensions() Dimensions {
   if b.parent == nil {
     return b.getDimensions()
   } else {
-    return b.Dimensions.offset(b.ParentControl().getDimensions())
+    return b.Dimensions.offset(b.ParentControl().absoluteDimensions())
   }
 }
 
@@ -87,6 +93,7 @@ func CreateContainerView(x int,y int,w int,h int) *ContainerView {
 }
 
 func (self *ContainerView) addChild(b BasicControl) {
+  b.setParent(self)
   self.children = append(self.children,b)
   self.dirty = true
 }
@@ -106,7 +113,7 @@ func (self *ContainerView) BlitIfNeeded(parentSurface *sdl.Surface) bool {
     self.dirty = self.dirty || control.BlitIfNeeded(self.getSurface())
   }
   if self.dirty {
-    var d = self.absoluteDimensions()
+    var d = self.getDimensions()
     self.getSurface().Blit(
       &sdl.Rect{0,0,int32(self.w),int32(self.h)},
       parentSurface,
@@ -141,6 +148,7 @@ func (self *Button) ProcessEvent(event *ControlEvent) {
     case *sdl.MouseButtonEvent:
       e := event.sdlevent.(*sdl.MouseButtonEvent)
       var d = self.absoluteDimensions()
+      fmt.Printf("in button %s dimensions are: %d,%d,%d,%d \n",self.text,d.x,d.y,d.w,d.h)
       if int32(d.x) <= e.X && e.X <= int32(d.x + d.w) {
         if int32(d.y) <= e.Y && e.Y <= int32(d.y + d.h) {
           fmt.Println("Button was pressed:",self.text)
@@ -169,7 +177,7 @@ func (self *Button) BlitIfNeeded(parentSurface *sdl.Surface) bool {
     }
 
     // blit it
-    var d = self.absoluteDimensions()
+    var d = self.getDimensions()
     self.getSurface().Blit(
       &sdl.Rect{0,0,int32(self.w),int32(self.h)},
       parentSurface,
@@ -220,6 +228,10 @@ func test(window *sdl.Window) {
   container := CreateContainerView(0,0,320,480)
   container.addChild(CreateButton(20,20,280,20,font,"Button 1"))
   container.addChild(CreateButton(20,50,280,20,font,"Button 2"))
+  container2 := CreateContainerView(20,80,280,100)
+  container2.addChild(CreateButton(20,20,260,20,font,"Button 3"))
+  container2.addChild(CreateButton(20,50,260,20,font,"Button 4"))
+  container.addChild(container2)
 
 
   

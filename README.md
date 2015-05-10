@@ -28,6 +28,7 @@ All other examples install in the same way.
   - Example2 - Button, ContainerView, combining views into multiple views
   - Example3 - print texts. For now: "Hello world!", 
   - Example4 - a text box. 
+  - Example5 - Rewrite of example2, separating the modules a little bit further.
 
 ### Planned/TODO.
 
